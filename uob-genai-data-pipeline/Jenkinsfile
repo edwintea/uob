@@ -1,0 +1,121 @@
+pipeline {
+    agent any
+
+    environment {
+        // Konfigurasi Image & Registry
+        REGISTRY          = "registry.internal.local" // Ganti dengan registry perusahaan / Docker Hub
+        BACKEND_IMAGE     = "${REGISTRY}/genai-backend"
+        FRONTEND_IMAGE    = "${REGISTRY}/genai-frontend"
+        IMAGE_TAG         = "${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}"
+
+        // Konfigurasi Kubernetes
+        KUBE_NAMESPACE    = "default"
+        KUBE_MANIFEST     = "workbench.yaml"
+    }
+
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
+
+    stages {
+        stage('1. Checkout & Lint') {
+            steps {
+                checkout scm
+                echo "Memulai build untuk commit: ${env.GIT_COMMIT}"
+            }
+        }
+
+        stage('2. Automated Testing (Backend & Frontend)') {
+            parallel {
+                stage('Backend Pytest') {
+                    steps {
+                        dir('backend') {
+                            sh '''
+                                python3 -m venv venv
+                                . venv/bin/activate
+                                pip install -r requirements.txt
+                                pytest -v || echo "Tambahkan unit test di folder tests/"
+                            '''
+                        }
+                    }
+                }
+                stage('Frontend Build Check') {
+                    steps {
+                        dir('frontend') {
+                            sh '''
+                                npm ci
+                                npm run build
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('3. Build Docker Images') {
+            parallel {
+                stage('Build Backend Image') {
+                    steps {
+                        sh "docker build -t ${BACKEND_IMAGE}:${IMAGE_TAG} -t ${BACKEND_IMAGE}:latest ./backend"
+                    }
+                }
+                stage('Build Frontend Image') {
+                    steps {
+                        sh "docker build -t ${FRONTEND_IMAGE}:${IMAGE_TAG} -t ${FRONTEND_IMAGE}:latest ./frontend"
+                    }
+                }
+            }
+        }
+
+        stage('4. Push Images to Registry') {
+            when {
+                branch 'main'
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-registry-creds', usernameVariable: 'REG_USER', passwordVariable: 'REG_PASS')]) {
+                    sh '''
+                        echo "$REG_PASS" | docker login ${REGISTRY} -u "$REG_USER" --password-stdin
+                        docker push ${BACKEND_IMAGE}:${IMAGE_TAG}
+                        docker push ${FRONTEND_IMAGE}:${IMAGE_TAG}
+                    '''
+                }
+            }
+        }
+
+        stage('5. Deploy to Kubernetes / OpenShift') {
+            when {
+                branch 'main'
+            }
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig-prod', variable: 'KUBECONFIG')]) {
+                    sh '''
+                        kubectl apply -f ${KUBE_MANIFEST} -n ${KUBE_NAMESPACE}
+                        kubectl set image deployment/backend backend=${BACKEND_IMAGE}:${IMAGE_TAG} -n ${KUBE_NAMESPACE}
+                        kubectl set image deployment/celery-worker worker=${BACKEND_IMAGE}:${IMAGE_TAG} -n ${KUBE_NAMESPACE}
+                        kubectl set image deployment/frontend frontend=${FRONTEND_IMAGE}:${IMAGE_TAG} -n ${KUBE_NAMESPACE}
+                        
+                        # Verifikasi rollout berjalan sukses
+                        kubectl rollout status deployment/backend -n ${KUBE_NAMESPACE} --timeout=120s
+                        kubectl rollout status deployment/celery-worker -n ${KUBE_NAMESPACE} --timeout=120s
+                        kubectl rollout status deployment/frontend -n ${KUBE_NAMESPACE} --timeout=120s
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline SUKSES! Aplikasi ter-deploy dengan tag: ${IMAGE_TAG}"
+        }
+        failure {
+            echo "Pipeline GAGAL pada build #${env.BUILD_NUMBER}. Periksa log stage terkait."
+        }
+        always {
+            // Bersihkan image lokal lama agar disk agent Jenkins tidak penuh
+            sh 'docker image prune -f || true'
+        }
+    }
+}

@@ -46,3 +46,8 @@ kubectl scale deployment redis backend celery-worker frontend --replicas=0
 rollout:
 docker build --no-cache -t genai-frontend:k3s . && docker save genai-frontend:k3s | sudo k3s ctr images import - && kubectl rollout restart deployment/frontend && kubectl rollout status deployment/frontend
 
+
+kubectl get ingress,pods,svc,pvc
+
+aktivasi metric server:
+kubectl get deployment metrics-server -n kube-system && kubectl top pods
