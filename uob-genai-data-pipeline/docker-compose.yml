@@ -17,9 +17,14 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: genai_backend
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/1
+      CHROMA_PERSIST_DIR: /app/data/chroma
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      EMBED_MODEL: nomic-embed-text
     volumes:
       - ./backend/data:/app/data
     ports:
@@ -41,9 +46,15 @@ services:
       dockerfile: Dockerfile
     container_name: genai_celery_worker
     command: celery -A app.celery_app:celery_app worker --loglevel=info
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/1
+      CHROMA_PERSIST_DIR: /app/data/chroma
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      EMBED_MODEL: nomic-embed-text
+      ANONYMIZED_TELEMETRY: "false"
     volumes:
       - ./backend/data:/app/data
     networks:
@@ -52,7 +63,7 @@ services:
       redis:
         condition: service_healthy
       backend:
-        condition: service_healthy
+        condition: service_started
 
   frontend:
     build:

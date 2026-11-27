@@ -1,0 +1,242 @@
+{
+  "jobs": {
+    "job-dbdab650": {
+      "job_id": "job-dbdab650",
+      "celery_task_id": null,
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "target_system": "GENAI_RAG_INDEX",
+      "source_type": "API_FEED",
+      "domain": "PRODUCT_GUIDE",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "status": "QUEUED",
+      "stage": "Queued in Celery Broker",
+      "records_expected": 3,
+      "records_processed": 0,
+      "dq_score": 0.0,
+      "chunks_created": 0,
+      "error_message": null,
+      "created_at": "2026-11-25 09:53:09",
+      "updated_at": "2026-11-25 09:53:09"
+    },
+    "job-443426cd": {
+      "job_id": "job-443426cd",
+      "celery_task_id": "b2dae507-e203-49c6-a9cc-967850d8f23b",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "target_system": "GENAI_RAG_INDEX",
+      "source_type": "POLICY_DOC",
+      "domain": "INCIDENT_RUNBOOK",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "status": "COMPLETED",
+      "stage": "COMPLETED - Indexed in ChromaDB (local-hash-fallback)",
+      "records_expected": 3,
+      "records_processed": 2,
+      "dq_score": 90.0,
+      "chunks_created": 2,
+      "error_message": null,
+      "created_at": "2026-11-27 16:18:52",
+      "updated_at": "2026-11-27 16:18:55"
+    },
+    "job-3b76f31b": {
+      "job_id": "job-3b76f31b",
+      "celery_task_id": "790d0182-a49e-4f3c-a6ca-a106a6d4c382",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "target_system": "GENAI_RAG_INDEX",
+      "source_type": "POLICY_DOC",
+      "domain": "OPERATIONS_SOP",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "status": "COMPLETED",
+      "stage": "COMPLETED - Indexed in ChromaDB (local-hash-fallback)",
+      "records_expected": 3,
+      "records_processed": 2,
+      "dq_score": 90.0,
+      "chunks_created": 2,
+      "error_message": null,
+      "created_at": "2026-11-27 16:19:42",
+      "updated_at": "2026-11-27 16:19:45"
+    },
+    "job-f23291e1": {
+      "job_id": "job-f23291e1",
+      "celery_task_id": "1b108576-4f38-4d91-8237-31b18dbd8750",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "target_system": "GENAI_RAG_INDEX",
+      "source_type": "POLICY_DOC",
+      "domain": "PRODUCT_GUIDE",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "status": "COMPLETED",
+      "stage": "COMPLETED - Indexed in ChromaDB (local-hash-fallback)",
+      "records_expected": 3,
+      "records_processed": 2,
+      "dq_score": 90.0,
+      "chunks_created": 2,
+      "error_message": null,
+      "created_at": "2026-11-27 16:19:59",
+      "updated_at": "2026-11-27 16:20:02"
+    },
+    "job-9550153f": {
+      "job_id": "job-9550153f",
+      "celery_task_id": "8016324d-43d7-41c7-91ca-26a8d62f1b5a",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "target_system": "GENAI_RAG_INDEX",
+      "source_type": "POLICY_DOC",
+      "domain": "INCIDENT_RUNBOOK",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "status": "COMPLETED",
+      "stage": "COMPLETED - Indexed in ChromaDB (local-hash-fallback)",
+      "records_expected": 3,
+      "records_processed": 1,
+      "dq_score": 80.0,
+      "chunks_created": 1,
+      "error_message": null,
+      "created_at": "2026-11-27 16:32:06",
+      "updated_at": "2026-11-27 16:32:09"
+    },
+    "job-f7fcbbed": {
+      "job_id": "job-f7fcbbed",
+      "celery_task_id": "a7551f71-a483-4f59-a2ba-e2f942756f96",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "target_system": "GENAI_RAG_INDEX",
+      "source_type": "POLICY_DOC",
+      "domain": "TRADE_COMPLIANCE",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "status": "COMPLETED",
+      "stage": "COMPLETED - Indexed in ChromaDB (local-hash-fallback)",
+      "records_expected": 3,
+      "records_processed": 1,
+      "dq_score": 80.0,
+      "chunks_created": 1,
+      "error_message": null,
+      "created_at": "2026-11-27 16:32:36",
+      "updated_at": "2026-11-27 16:32:39"
+    }
+  },
+  "chunks": [
+    {
+      "chunk_id": "chk-7f1ddd16",
+      "job_id": "job-443426cd",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "domain": "INCIDENT_RUNBOOK",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "chunk_index": 0,
+      "text": "Enterprise Operations & Incident Escalation Runbook 1. Purpose: Standardize data ingestion, validation, and exception handling across upstream operational feeds and downstream GenAI knowledge retrieval workflows. 2. Data Contract & Reconciliation: Every batch or API payload must include source_system, domain tag, timestamp, and expected record count. Any mismatch above 5% flags a reconciliation warning for operational review. 3. Incident Triage: When an upstream feed delays or fails schema validation, isolate the affected batch, preserve raw payload metadata for root cause analysis, notify application and data platform owners, and avoid partial silent writes into downstream search/RAG indexes. 4. RAG Readiness: Normalize whitespace,",
+      "metadata": {
+        "target_system": "GENAI_RAG_INDEX",
+        "source_type": "POLICY_DOC",
+        "word_count": 100,
+        "dq_score": 90.0,
+        "rag_ready": true
+      }
+    },
+    {
+      "chunk_id": "chk-89d662c3",
+      "job_id": "job-443426cd",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "domain": "INCIDENT_RUNBOOK",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "chunk_index": 1,
+      "text": "writes into downstream search/RAG indexes. 4. RAG Readiness: Normalize whitespace, enrich chunks with source provenance and domain metadata, and verify chunk boundaries before indexing.",
+      "metadata": {
+        "target_system": "GENAI_RAG_INDEX",
+        "source_type": "POLICY_DOC",
+        "word_count": 24,
+        "dq_score": 90.0,
+        "rag_ready": true
+      }
+    },
+    {
+      "chunk_id": "chk-5e280df6",
+      "job_id": "job-3b76f31b",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "domain": "OPERATIONS_SOP",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "chunk_index": 0,
+      "text": "Enterprise Operations & Incident Escalation Runbook 1. Purpose: Standardize data ingestion, validation, and exception handling across upstream operational feeds and downstream GenAI knowledge retrieval workflows. 2. Data Contract & Reconciliation: Every batch or API payload must include source_system, domain tag, timestamp, and expected record count. Any mismatch above 5% flags a reconciliation warning for operational review. 3. Incident Triage: When an upstream feed delays or fails schema validation, isolate the affected batch, preserve raw payload metadata for root cause analysis, notify application and data platform owners, and avoid partial silent writes into downstream search/RAG indexes. 4. RAG Readiness: Normalize whitespace,",
+      "metadata": {
+        "target_system": "GENAI_RAG_INDEX",
+        "source_type": "POLICY_DOC",
+        "word_count": 100,
+        "dq_score": 90.0,
+        "rag_ready": true
+      }
+    },
+    {
+      "chunk_id": "chk-03025e0a",
+      "job_id": "job-3b76f31b",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "domain": "OPERATIONS_SOP",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "chunk_index": 1,
+      "text": "writes into downstream search/RAG indexes. 4. RAG Readiness: Normalize whitespace, enrich chunks with source provenance and domain metadata, and verify chunk boundaries before indexing.",
+      "metadata": {
+        "target_system": "GENAI_RAG_INDEX",
+        "source_type": "POLICY_DOC",
+        "word_count": 24,
+        "dq_score": 90.0,
+        "rag_ready": true
+      }
+    },
+    {
+      "chunk_id": "chk-0295bbc4",
+      "job_id": "job-f23291e1",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "domain": "PRODUCT_GUIDE",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "chunk_index": 0,
+      "text": "Enterprise Operations & Incident Escalation Runbook 1. Purpose: Standardize data ingestion, validation, and exception handling across upstream operational feeds and downstream GenAI knowledge retrieval workflows. 2. Data Contract & Reconciliation: Every batch or API payload must include source_system, domain tag, timestamp, and expected record count. Any mismatch above 5% flags a reconciliation warning for operational review. 3. Incident Triage: When an upstream feed delays or fails schema validation, isolate the affected batch, preserve raw payload metadata for root cause analysis, notify application and data platform owners, and avoid partial silent writes into downstream search/RAG indexes. 4. RAG Readiness: Normalize whitespace,",
+      "metadata": {
+        "target_system": "GENAI_RAG_INDEX",
+        "source_type": "POLICY_DOC",
+        "word_count": 100,
+        "dq_score": 90.0,
+        "rag_ready": true
+      }
+    },
+    {
+      "chunk_id": "chk-6de3e5cc",
+      "job_id": "job-f23291e1",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "domain": "PRODUCT_GUIDE",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "chunk_index": 1,
+      "text": "writes into downstream search/RAG indexes. 4. RAG Readiness: Normalize whitespace, enrich chunks with source provenance and domain metadata, and verify chunk boundaries before indexing.",
+      "metadata": {
+        "target_system": "GENAI_RAG_INDEX",
+        "source_type": "POLICY_DOC",
+        "word_count": 24,
+        "dq_score": 90.0,
+        "rag_ready": true
+      }
+    },
+    {
+      "chunk_id": "chk-5bd92016",
+      "job_id": "job-9550153f",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "domain": "INCIDENT_RUNBOOK",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "chunk_index": 0,
+      "text": "Enterprise Operations & Incident Escalation Runbook 1. Purpose: Standardize data ingestion, validation, and exception handling across upstream operational feeds and downstream GenAI knowledge retrieval workflows. 2. Data Contract & Reconciliation: Every batch or API payload must include source_system, domain tag, timestamp, and expected record count. Any mismatch above 5% flags a reconciliation warning for operational review. 3. Incident Triage: When an upstream feed delays or fails schema validation, isolate the affected batch, preserve raw payload metadata for root cause analysis, notify application and data platform owners, and avoid partial silent writes into downstream search/RAG indexes. 4. RAG Readiness: Normalize whitespace, enrich chunks with source provenance and domain metadata, and verify chunk boundaries before indexing.",
+      "metadata": {
+        "target_system": "GENAI_RAG_INDEX",
+        "source_type": "POLICY_DOC",
+        "word_count": 114,
+        "dq_score": 80.0,
+        "rag_ready": true
+      }
+    },
+    {
+      "chunk_id": "chk-de6e1449",
+      "job_id": "job-f7fcbbed",
+      "document_title": "Data Integration & Incident Triage SOP v1.2",
+      "domain": "TRADE_COMPLIANCE",
+      "source_system": "GTO_KNOWLEDGE_HUB",
+      "chunk_index": 0,
+      "text": "Enterprise Operations & Incident Escalation Runbook 1. Purpose: Standardize data ingestion, validation, and exception handling across upstream operational feeds and downstream GenAI knowledge retrieval workflows. 2. Data Contract & Reconciliation: Every batch or API payload must include source_system, domain tag, timestamp, and expected record count. Any mismatch above 5% flags a reconciliation warning for operational review. 3. Incident Triage: When an upstream feed delays or fails schema validation, isolate the affected batch, preserve raw payload metadata for root cause analysis, notify application and data platform owners, and avoid partial silent writes into downstream search/RAG indexes. 4. RAG Readiness: Normalize whitespace, enrich chunks with source provenance and domain metadata, and verify chunk boundaries before indexing.",
+      "metadata": {
+        "target_system": "GENAI_RAG_INDEX",
+        "source_type": "POLICY_DOC",
+        "word_count": 114,
+        "dq_score": 80.0,
+        "rag_ready": true
+      }
+    }
+  ]
+}

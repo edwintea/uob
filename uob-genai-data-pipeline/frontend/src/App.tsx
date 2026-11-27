@@ -27,8 +27,8 @@ export const App: React.FC = () => {
             if (domainFilter !== "ALL") params.set("domain", domainFilter);
 
             const [ovRes, chRes] = await Promise.all([
-                fetch("http://localhost:8000/api/overview"),
-                fetch(`http://localhost:8000/api/chunks?${params.toString()}`),
+                fetch("/api/overview"),
+                fetch(`/api/chunks?${params.toString()}`),
             ]);
 
             if (ovRes.ok) {

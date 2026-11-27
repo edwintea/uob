@@ -21,7 +21,7 @@ export const IngestionForm: React.FC<Props> = ({ onSubmitted }) => {
     );
     const [rawContent, setRawContent] = useState(SAMPLE_DOC);
     const [recordsExpected, setRecordsExpected] = useState(3);
-    const [chunkSize, setChunkSize] = useState(60);
+    const [chunkSize, setChunkSize] = useState(200);
     const [overlap, setOverlap] = useState(10);
     const [submitting, setSubmitting] = useState(false);
     const [feedback, setFeedback] = useState<string | null>(null);
@@ -52,7 +52,7 @@ export const IngestionForm: React.FC<Props> = ({ onSubmitted }) => {
         };
 
         try {
-            const res = await fetch("http://localhost:8000/api/ingest", {
+            const res = await fetch("api/ingest", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),

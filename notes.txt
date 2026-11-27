@@ -1,0 +1,48 @@
+setup k3s:
+mkdir -p ~/.kube
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+sudo chown "$USER":"$USER" ~/.kube/config
+chmod 600 ~/.kube/config
+
+arahakn k3s ke kube_config user:
+unset KUBECONFIG
+export KUBECONFIG="$HOME/.kube/config"
+env | grep -i kube
+ls -la ~/.kube/config
+
+
+app layer:
+1.Hentikan Stack Docker Compose dan Build Image k3s:Di folder ~/Documents/interview/a-it/uob/uob-genai-data-pipeline.Matikan container Docker Compose yang sedang memakai RAM agar memori lega untuk cluster k3s, lalu build image backend dan frontend serta impor ke containerd milik k3s.
+
+cd ~/Documents/interview/a-it/uob/uob-genai-data-pipeline
+docker compose down
+docker build --target build -t genai-frontend:k3s ./frontend
+docker build -t genai-backend:k3s ./backend
+docker save genai-backend:k3s | sudo k3s ctr images import -
+docker save genai-frontend:k3s | sudo k3s ctr images import -
+sudo k3s ctr images ls | grep genai-
+
+run kube:
+kubectl apply -f ~/k3s-genai/workbench.yaml && kubectl get pvc,pods,svc
+gnome-text-editor ~/k3s-genai/workbench.yaml
+=================
+Cek konfigurasi command bawaan di dalam image genai-frontend:k3s yang sudah terimpor di k3s.:
+docker inspect --format='Entrypoint: {{.Config.Entrypoint}} | Cmd: {{.Config.Cmd}}' genai-frontend:k3s
+sudo k3s ctr images inspect --mode=docker docker.io/library/genai-frontend:k3s 2>/dev/null | grep -i -A 5 -E '"cmd"|"entrypoint"'
+
+cek isi di k3s:
+docker run --rm --entrypoint sh genai-frontend:k3s -c 'pwd && ls -la && ls -la /usr/share/nginx/html 2>/dev/null || true'
+
+
+kubectl port-forward svc/backend 8000:8000
+
+rebuild & restart:
+docker build -t genai-backend:k3s ./backend && docker save genai-backend:k3s | sudo k3s ctr images import -
+kubectl rollout restart deployment/backend deployment/celery-worker && kubectl rollout status deployment/backend && kubectl rollout status deployment/celery-worker
+
+stop ppod sementar:
+kubectl scale deployment redis backend celery-worker frontend --replicas=0
+
+rollout:
+docker build --no-cache -t genai-frontend:k3s . && docker save genai-frontend:k3s | sudo k3s ctr images import - && kubectl rollout restart deployment/frontend && kubectl rollout status deployment/frontend
+

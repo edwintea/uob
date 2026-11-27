@@ -1,6 +1,5 @@
-from typing import Literal, Optional, List, Dict, Any
+from typing import Any, Dict, List, Literal, Optional
 from pydantic import BaseModel, Field
-
 
 SourceType = Literal["API_FEED", "SFTP_BATCH_FILE", "POLICY_DOC"]
 DomainTag = Literal["OPERATIONS_SOP", "PRODUCT_GUIDE", "INCIDENT_RUNBOOK", "TRADE_COMPLIANCE"]
@@ -16,6 +15,14 @@ class IngestRequest(BaseModel):
     records_expected: int = Field(default=1, ge=1)
     chunk_size: int = Field(default=350, ge=100, le=1500)
     overlap: int = Field(default=50, ge=0, le=300)
+
+
+class IngestResponse(BaseModel):
+    job_id: str
+    celery_task_id: Optional[str] = None
+    status: Literal["QUEUED", "RUNNING", "COMPLETED", "FAILED"]
+    stage: str
+    message: str
 
 
 class JobSummary(BaseModel):
@@ -56,3 +63,10 @@ class PipelineOverview(BaseModel):
     total_rag_chunks: int
     avg_dq_score: float
     jobs: List[JobSummary]
+
+
+class VectorSearchResult(BaseModel):
+    chunk_id: str
+    text: str
+    distance: float
+    metadata: Dict[str, Any]
