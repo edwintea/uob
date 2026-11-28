@@ -51,3 +51,11 @@ kubectl get ingress,pods,svc,pvc
 
 aktivasi metric server:
 kubectl get deployment metrics-server -n kube-system && kubectl top pods
+
+kubectl delete hpa backend-hpa celery-worker-hpa --ignore-not-found && kubectl scale deployment redis backend celery-worker frontend --replicas=0
+
+kubectl scale deployment redis backend celery-worker frontend --replicas=1
+
+kubectl get endpointslices -n uob
+
+kubectl delete -f workbench.yaml
